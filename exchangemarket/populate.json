@@ -1,0 +1,111 @@
+
+[
+    {
+        "model":"exchange_market_app.Users",
+        "pk":1,
+        "fields":{
+            "name": "TestUser1",
+            "country":"Denmark",
+            "username": "TestUser1",
+            "password":"test"
+        }
+    },
+    {
+        "model":"exchange_market_app.Users",
+        "pk":2,
+        "fields":{
+            "name": "TestUser2",
+            "country":"Denmark",
+            "username": "TestUser2",
+            "password":"test"
+        }
+    },
+    {
+        "model":"exchange_market_app.Inventories",
+        "pk":1,
+        "fields":{
+            "user":1
+        }
+    },
+    {
+        "model":"exchange_market_app.Inventories",
+        "pk":2,
+        "fields":{
+            "user":2
+        }
+    },
+    {
+        "model":"exchange_market_app.Items",
+        "pk":1,
+        "fields":{
+            "inventory":1,
+            "name": "TestItem1",
+            "description": "This is test for Item",
+            "image":""
+        }
+    },
+    {
+        "model":"exchange_market_app.Items",
+        "pk":2,
+        "fields":{
+            "inventory":2,
+            "name": "TestItem2",
+            "description": "This is test for Item",
+            "image":""
+        }
+    },
+    {
+        "model":"exchange_market_app.Offers",
+        "pk":1,
+        "fields":{}
+    },
+    {
+        "model":"exchange_market_app.OfferItems",
+        "fields":{
+            "offer":1,
+            "item": 1
+        }
+    },
+    {
+        "model":"exchange_market_app.OfferItems",
+        "fields":{
+            "offer":1,
+            "item": 2
+        }
+    },
+    {
+        "model":"exchange_market_app.OfferUsers",
+        "fields":{
+            "user":1,
+            "offer": 1
+        }
+    },    
+    {
+        "model":"exchange_market_app.OfferUsers",
+        "fields":{
+            "user":2,
+            "offer": 1
+        }
+    },
+    {
+        "model":"exchange_market_app.Comments",
+        "pk": 1,
+        "fields":{
+            "comment":"This tests comments",
+            "offer": 1,
+            "user": 1
+        }
+    },
+    {
+        "model":"exchange_market_app.Comments",
+        "pk": 1,
+        "fields":{
+            "comment":"This tests comments2",
+            "offer": 1,
+            "user": 2
+        }
+    }
+    
+]
+
+

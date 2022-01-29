@@ -1,0 +1,5 @@
+Django
+django-template-check
+gunicorn
+django-heroku
+mysqlclient
