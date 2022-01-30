@@ -13,9 +13,11 @@
                     <a href="/" style="all:unset"><h1>Exchange Market App</h1></a>
                 </div>
                 {% if user_id %}
-                    <div class="col-2" style="padding-top: 8px;">
-                        <a href="/login" type="button" class="btn btn-primary">Your Inventory</a>
-                        <a href="api/logout" type="button" class="btn btn-primary">Log-out</a>
+                    <div class="col-2" style="padding-top: 8px; width: 12%;">
+                        <a href="/inventory" type="button" class="btn btn-primary">Your Inventory</a>
+                    </div>
+                    <div class="col-1" style="padding-top: 8px;">
+                        <a href="api/logout" type="button" class="btn btn-danger">Log-out</a>
                     </div>
                     {%else%}
                     <div class="col-2" style="padding-top: 8px;">

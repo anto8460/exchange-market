@@ -52,3 +52,4 @@ class User:
         if self._data is None:
             return None
         return self._data[0].id
+

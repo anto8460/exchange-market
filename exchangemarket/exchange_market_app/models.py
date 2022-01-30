@@ -8,6 +8,65 @@
 from django.db import models
 
 
+class Users(models.Model):
+    email = models.TextField(blank=True, null=True)
+    name = models.TextField(blank=True, null=True)
+    country = models.TextField(blank=True, null=True)
+    username = models.TextField(blank=True, null=True)
+    password = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'users'
+
+
+class Comments(models.Model):
+    comment = models.TextField(blank=True, null=True)
+    offer = models.ForeignKey('Offers', models.DO_NOTHING)
+    user = models.ForeignKey('Users', models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'comments'
+
+
+class Inventories(models.Model):
+    user = models.ForeignKey('Users', models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'inventories'
+
+
+class Items(models.Model):
+    inventory = models.ForeignKey(Inventories, models.DO_NOTHING)
+    name = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    image = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'items'
+
+
+class OfferItems(models.Model):
+    offer = models.ForeignKey('Offers', models.DO_NOTHING)
+    item = models.ForeignKey(Items, models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'offer_items'
+
+
+class OfferUsers(models.Model):
+    user = models.ForeignKey('Users', models.DO_NOTHING)
+    offer = models.ForeignKey('Offers', models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'offer_users'
+
+
+class Offers(models.Model):
+
+    class Meta:
+        db_table = 'offers'
+
+
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
 
@@ -77,16 +136,6 @@ class AuthUserUserPermissions(models.Model):
         unique_together = (('user', 'permission'),)
 
 
-class Comments(models.Model):
-    comment = models.TextField(blank=True, null=True)
-    offer = models.ForeignKey('Offers', models.DO_NOTHING)
-    user = models.ForeignKey('Users', models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'comments'
-
-
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
     object_id = models.TextField(blank=True, null=True)
@@ -131,58 +180,3 @@ class DjangoSession(models.Model):
         managed = False
         db_table = 'django_session'
 
-
-class Inventories(models.Model):
-    user = models.ForeignKey('Users', models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'inventories'
-
-
-class Items(models.Model):
-    inventory = models.ForeignKey(Inventories, models.DO_NOTHING)
-    name = models.TextField(blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    image = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'items'
-
-
-class OfferItems(models.Model):
-    offer = models.ForeignKey('Offers', models.DO_NOTHING)
-    item = models.ForeignKey(Items, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'offer_items'
-
-
-class OfferUsers(models.Model):
-    user = models.ForeignKey('Users', models.DO_NOTHING)
-    offer = models.ForeignKey('Offers', models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'offer_users'
-
-
-class Offers(models.Model):
-
-    class Meta:
-        managed = False
-        db_table = 'offers'
-
-
-class Users(models.Model):
-    email = models.TextField(blank=True, null=True)
-    name = models.TextField(blank=True, null=True)
-    country = models.TextField(blank=True, null=True)
-    username = models.TextField(blank=True, null=True)
-    password = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'users'
