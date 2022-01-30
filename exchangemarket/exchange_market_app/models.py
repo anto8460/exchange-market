@@ -177,6 +177,7 @@ class Offers(models.Model):
 
 
 class Users(models.Model):
+    email = models.TextField(blank=True, null=True)
     name = models.TextField(blank=True, null=True)
     country = models.TextField(blank=True, null=True)
     username = models.TextField(blank=True, null=True)

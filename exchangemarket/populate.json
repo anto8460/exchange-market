@@ -5,6 +5,7 @@
         "pk":1,
         "fields":{
             "name": "TestUser1",
+            "email": "testuser1@test",
             "country":"Denmark",
             "username": "TestUser1",
             "password":"test"
@@ -15,6 +16,7 @@
         "pk":2,
         "fields":{
             "name": "TestUser2",
+            "email": "testuser2@test",
             "country":"Denmark",
             "username": "TestUser2",
             "password":"test"
