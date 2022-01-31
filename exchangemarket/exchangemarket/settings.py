@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_template_check',
     'exchange_market_app',
     'django.contrib.admin',
     'django.contrib.auth',
