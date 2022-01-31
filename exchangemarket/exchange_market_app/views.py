@@ -64,3 +64,34 @@ def inventory(request):
     user_id = request.session["user_id"]
     items = User.User.get_inventory_items(user_id)
     return render(request, 'inventory.html',  {"items": items, "user_id": user_id})
+
+def register(request):
+    
+    if request.method == "POST":
+        register_form = forms.RegisterForm(request.POST)
+        if register_form.is_valid():
+            if register_form.data["password"] != register_form.data["repeat_password"]:
+                messages.add_message(request, messages.ERROR, f"Passwords don't match!")
+                return render(request, 'register.html', {"form": register_form})
+            else:
+                name = register_form.data["name"]
+                country = register_form.data["country"]
+                username = register_form.data["username"]
+                email = register_form.data["email"]
+                password = register_form.data["password"]
+
+                result = User.User.add_user(name, country, username, email, password)
+            
+            if result == User.UserStates.USER_EXISTS:
+                messages.add_message(request, messages.ERROR, f"User already exists! Try to log in instead")
+                return render(request, 'register.html', {"form": register_form})
+            
+            if result == User.UserStates.USERNAME_EXISTS:
+                messages.add_message(request, messages.ERROR, f"Username already taken.")
+                return render(request, 'register.html', {"form": register_form}) 
+
+            if result == User.UserStates.USER_CREATED:
+                messages.add_message(request, messages.SUCCESS, f"Registered successfully, try to sign in.")
+                return redirect("/login/")
+
+    return render(request, 'register.html')

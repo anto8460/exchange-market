@@ -54,3 +54,42 @@ class UserClassTest(TestCase):
         expected = models.Items.objects.filter(inventory=inventory[0].id)
         result = User.get_inventory_items(user_id=user[0].id)
         self.assertListEqual( list(result), list(expected) )
+
+    def test_User_add_user_correct_input(self):
+        name = "TestUser3"
+        country = "Denmark"
+        username = "UsernameTEST3"
+        email =  "testuser3@test"
+        password = "testpass"
+
+        result = User.add_user(name, country, username, email, password)
+        expected = UserStates.USER_CREATED
+
+        self.assertEqual( result, expected )
+    
+    def test_User_add_user_existing_email(self):
+        name = "TestUser3"
+        country = "Denmark"
+        username = "UsernameTEST3"
+        email =  "testuser3@test"
+        password = "testpass"
+
+        User.add_user(name, country, username, email, password)
+        username = "UsernameTEST4"
+        result = User.add_user(name, country, username, email, password)
+        expected = UserStates.USER_EXISTS
+
+        self.assertEqual( result, expected )
+
+    def test_User_add_user_existing_username(self):
+        name = "TestUser3"
+        country = "Denmark"
+        username = "UsernameTEST3"
+        email =  "testuser3@test"
+        password = "testpass"
+
+        User.add_user(name, country, username, email, password)
+        result = User.add_user(name, country, username, email, password)
+        expected = UserStates.USERNAME_EXISTS
+
+        self.assertEqual( result, expected )
