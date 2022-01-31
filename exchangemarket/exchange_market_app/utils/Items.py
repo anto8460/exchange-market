@@ -15,13 +15,14 @@ class Items:
         return list(models.Items.objects.all())
 
     @staticmethod
-    def create_item(user_id, name, description):
+    def create_item(user_id, name, description, free):
         user = models.Users.objects.filter(id=user_id)
         inventory = models.Inventories.objects.filter(user=user[0].id)
         item = models.Items.objects.create(
             inventory=inventory[0],
             name=name,
-            description=description
+            description=description,
+            is_free=free
         )
         return ItemsState.ITEM_CREATED
 

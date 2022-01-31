@@ -40,6 +40,7 @@ class Items(models.Model):
     name = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     image = models.TextField(blank=True, null=True)
+    is_free = models.IntegerField(blank=True, null=True)
 
     class Meta:
         db_table = 'items'

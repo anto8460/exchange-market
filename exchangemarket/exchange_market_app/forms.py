@@ -17,3 +17,4 @@ class CreateItemForm(forms.Form):
     name = forms.CharField(label="Name", max_length=20)
     description = forms.CharField(label="Name", max_length=20)
     image = forms.FileInput()
+    check = forms.BooleanField(label="List Item for Free", required=False)

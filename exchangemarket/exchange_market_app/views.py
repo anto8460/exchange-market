@@ -100,12 +100,16 @@ def create_item(request):
 
     if request.method == "POST":
         create_item_form = forms.CreateItemForm(request.POST)
+        print(request.POST)
         print(create_item_form.is_valid())
         if create_item_form.is_valid():
             user_id = request.session["user_id"]
             name =  create_item_form.data["name"]
             description = create_item_form.data["description"]
-            result = Items.create_item(user_id, name, description)
+
+            free = True if "check" in create_item_form.data else False
+
+            result = Items.create_item(user_id, name, description, free)
             if (result == ItemsState.ITEM_CREATED):
                 messages.add_message(request, messages.SUCCESS, f"Item Succesfully added")
                 return redirect("/inventory")

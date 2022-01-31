@@ -47,7 +47,13 @@
                 <div class="card" style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title">{{item.name}}</h5>
+                        {% if  item.is_free%}
+                            <h6 class="card-subtitle mb-2 text-muted">Item Listed for free</h6>
+                        {% else %}
+                            <h6 class="card-subtitle mb-2 text-muted">Item is not Listed for free</h6> 
+                        {% endif %}
                         <p class="card-text">{{item.description}}</p>
+                        
                         {%if item_is_from_inventory%}
                             <div class="container-sm">
                                 <a href="/edit_item/{{item.id}}" type="button" class="btn btn-warning">Edit Item</a>
