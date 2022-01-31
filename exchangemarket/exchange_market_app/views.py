@@ -112,3 +112,44 @@ def create_item(request):
 
 
     return render(request, "create_item.html")
+
+def view_item(request, id):
+    user_id = request.session["user_id"]
+    item, state = Items.get_item(id)
+    item_is_from_inventory = Items.is_item_from_inventory(id, user_id)
+
+    if state == ItemsState.ITEM_NOT_FOUND:
+        messages.add_message(request, messages.ERROR, f"Item not found")
+        return render(request, "item.html", {"item": item})
+
+    if request.method == 'POST':
+        if "delete_item" in request.POST:
+            status = Items.delete_item(id)
+            if status == ItemsState.ITEM_DELETED:
+                return redirect("/inventory")
+            else:
+                messages.add_message(request, messages.ERROR, f"System Error")
+
+    return render(request, "item.html", {"item": item[0], "user_id": user_id, "item_is_from_inventory": item_is_from_inventory})
+
+def edit_item(request, id):
+    form = dict()
+    item, status = Items.get_item(id)
+    print(item)
+    form["name"] = item[0].name
+    form["description"] = item[0].description
+
+    if request.method == "POST":
+        edit_item_form = forms.CreateItemForm(request.POST)
+        print(edit_item_form.is_valid())
+        if edit_item_form.is_valid():
+            user_id = request.session["user_id"]
+            name =  edit_item_form.data["name"]
+            description = edit_item_form.data["description"]
+            result = Items.edit_item(id, name, description)
+            
+            if (result == ItemsState.ITEM_EDITED):
+                messages.add_message(request, messages.SUCCESS, f"Item Succesfully edited!")
+                return redirect("/inventory")
+
+    return render(request, "edit_item.html", {"name": form["name"], "description": form["description"]})

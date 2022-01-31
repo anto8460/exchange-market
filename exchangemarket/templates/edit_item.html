@@ -12,7 +12,7 @@
         </div>
         <br>
         <div class="container-sm">
-            <h3>Create Item<h3>
+            <h3>Edit Item<h3>
         </div>
 
         {% if messages %}
@@ -31,15 +31,15 @@
         <br>
         <div class="container-sm">
             <div class="col-3">
-                <form action="." method="post">
+                <form action="" method="post">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="InputName1" class="form-label">Name</label>
-                        <input name="name" type="text" class="form-control" id="InputEmail1" aria-describedby="emailHelp" required>
+                        <input name="name" type="text" value="{{name}}" class="form-control" id="InputEmail1" aria-describedby="emailHelp" required>
                     </div>
                     <div class="mb-3">
                         <label for="Description" class="form-label">Description</label>
-                        <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
+                        <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="3" required>{{description}}</textarea>
                     </div>
                     <div class="mb-3">
                         <label for="formFile" class="form-label">Import Picture</label>

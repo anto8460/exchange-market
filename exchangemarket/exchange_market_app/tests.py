@@ -105,10 +105,21 @@ class ItemClassTest(TestCase):
             country="Denmark",
             username= "TestUser2",
             password="test")
+        
+        users2 = models.Users.objects.create(
+            name="TestUser1",
+            email="testuser1@test",
+            country="Denmark",
+            username= "TestUser1",
+            password="test")
 
         inventory = models.Inventories.objects.create(
             user=users
         )
+        inventory2 = models.Inventories.objects.create(
+            user=users2
+        )
+
         item1 = models.Items.objects.create(
             inventory = inventory,
             name = "TestItem1",
@@ -118,6 +129,12 @@ class ItemClassTest(TestCase):
         item2 = models.Items.objects.create(
             inventory = inventory,
             name = "TestItem2",
+            description = "This is test for Item",
+            image = ""
+        )
+        item3 = models.Items.objects.create(
+            inventory = inventory,
+            name = "TestItem3",
             description = "This is test for Item",
             image = ""
         )
@@ -137,3 +154,53 @@ class ItemClassTest(TestCase):
         expected = ItemsState.ITEM_CREATED
 
         self.assertEqual(result, expected)
+    
+    def test_Items_get_item(self):
+        expected_item = models.Items.objects.filter(name="TestItem1")
+        item, status = Items.get_item(expected_item[0].id)
+
+        expected = [expected_item[0], ItemsState.ITEM_FOUND]
+        result = [item[0], status]
+        self.assertListEqual(expected, result)
+
+    def test_Items_is_item_from_inventory_true(self):
+        user = models.Users.objects.filter(name="TestUser2")
+        item = models.Items.objects.filter(name="TestItem1")
+
+        result = Items.is_item_from_inventory(item[0].id, user[0].id)
+        expected = True
+
+        self.assertEqual(expected, result)
+
+    def test_Items_is_item_from_inventory_false(self):
+        user = models.Users.objects.filter(name="TestUser1")
+        item = models.Items.objects.filter(name="TestItem1")
+
+        result = Items.is_item_from_inventory(item[0].id, user[0].id)
+        expected = False
+
+        self.assertEqual(expected, result)
+
+    def test_Items_delete_item(self):
+        item = models.Items.objects.filter(name="TestItem1")
+
+        result = Items.delete_item(item[0].id)
+        expected = ItemsState.ITEM_DELETED
+
+        self.assertEqual(expected, result)
+
+    def test_Items_delete_item_not_in_db(self):
+        item = models.Items.objects.filter(name="TestItem3")
+        item_id = item[0].id
+        Items.delete_item(item[0].id)
+        result = Items.delete_item(item_id)
+        expected = ItemsState.ITEM_NOT_FOUND
+
+        self.assertEqual(expected, result)
+
+    def test_Items_edit_item(self):
+        item = models.Items.objects.filter(name="TestItem2")
+        result = Items.edit_item(item[0].id, "Edited", "Edited")
+        expected = ItemsState.ITEM_EDITED
+        
+        self.assertEqual(expected, result)
