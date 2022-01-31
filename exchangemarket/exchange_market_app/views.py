@@ -141,7 +141,7 @@ def edit_item(request, id):
 
     if request.method == "POST":
         edit_item_form = forms.CreateItemForm(request.POST)
-        print(edit_item_form.is_valid())
+
         if edit_item_form.is_valid():
             user_id = request.session["user_id"]
             name =  edit_item_form.data["name"]
@@ -153,3 +153,7 @@ def edit_item(request, id):
                 return redirect("/inventory")
 
     return render(request, "edit_item.html", {"name": form["name"], "description": form["description"]})
+
+def create_offer(request):
+
+    return render(request, "create_offer.html")

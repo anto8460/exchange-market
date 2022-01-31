@@ -77,15 +77,14 @@ WSGI_APPLICATION = 'exchangemarket.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'exchange_market',
-        'USER': 'root',
-        'PASSWORD': 'testtest',
-        'HOST': '172.17.0.2',
-        'PORT': '3306',
+        'ENGINE': os.environ.get('DBENGINE', ''),
+        'NAME': os.environ.get('DBNAME', ''),
+        'USER': os.environ.get('DBUSER', ''),
+        'PASSWORD': os.environ.get('DBPASSWORD', ''),
+        'HOST': os.environ.get('DBHOST', ''),
+        'PORT': os.environ.get('DBPORT', ''),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
