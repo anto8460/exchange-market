@@ -2,42 +2,52 @@
 from django.forms import forms
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from exchange_market_app.utils.get_items import get_all_items
+from exchange_market_app.utils.Items import Items
 from exchange_market_app import forms
 from exchange_market_app import User
 
 # Create your views here.
 
 def index(request):
-    items = get_all_items()
-    user_id = request.session["user_id"]
+    items = Items.get_all_items()
+
+    request.session["log_in_counter"] = 3
+
+    try:
+        user_id = request.session["user_id"]
+    except KeyError:
+        request.session["user_id"] = None
+        user_id = request.session["user_id"]
+    
     return render(request, 'index.html', {"items": items, "user_id": user_id})
 
 def login(request):
 
-    user = User.User()
-
     if request.method == "POST":
-        login_form = forms.LoginForm(request.POST)
-        
-        if login_form.is_valid():
-            result = user.authenticate(login_form.data["email"], login_form.data["password"])    
+        if request.session["log_in_counter"] != 1:
+            login_form = forms.LoginForm(request.POST)
             
-            if result == User.UserStates.EXCEED_TRIES:
-                messages.add_message(request, messages.ERROR, "Too many attempt to log-in with wrong credentials")
-                User.User.reload_counter()
-                return redirect("/")
-            
-            if result == User.UserStates.WRONG_CREDENTIALS:
-                messages.add_message(request, messages.ERROR, f"Wrong Credentials. Left tries: {User.User.counter}")
-                return render(request, 'login.html', {"form": login_form})
+            if login_form.is_valid():
+                result = User.User.authenticate(login_form.data["email"], login_form.data["password"])    
+                
+                if result == User.UserStates.WRONG_CREDENTIALS:
+                    request.session["log_in_counter"] -= 1
+                    attempts = request.session["log_in_counter"]
+                    messages.add_message(request, messages.ERROR, f"Wrong Credentials. Left attempts {attempts}")
+                    return render(request, 'login.html', {"form": login_form})
 
-            if result == User.UserStates.AUTHENTICATED:
-                messages.add_message(request, messages.SUCCESS, "Logged-in!")
-                request.session["user_id"] = user.get_primary_key()
-                return redirect("/")
+                if result == User.UserStates.AUTHENTICATED:
+                    request.session["log_in_counter"] = 3
+                    messages.add_message(request, messages.SUCCESS, "Logged-in!")
+                    request.session["user_id"] = User.User.get_primary_key()
+                    return redirect("/")
+            else:
+                return render(request, 'login.html', {"form": login_form}) 
         else:
-             return render(request, 'login.html', {"form": login_form})  
+            request.session["log_in_counter"] = 3
+            messages.add_message(request, messages.ERROR, "Too many attempt to log-in with wrong credentials")
+
+            return redirect("/") 
     else:
         login_form = forms.LoginForm()
 
@@ -46,4 +56,11 @@ def login(request):
 def log_out(request):
     request.session["user_id"] = None
     messages.add_message(request, messages.SUCCESS, "Logged-out!")
+
     return redirect("/login/")
+
+def inventory(request):
+    items = None
+    user_id = request.session["user_id"]
+    items = User.User.get_inventory_items(user_id)
+    return render(request, 'inventory.html',  {"items": items, "user_id": user_id})
