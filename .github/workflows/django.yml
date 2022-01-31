@@ -24,7 +24,7 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        python testing_ci/manage.py templatecheck
+        python exchangemarket/manage.py templatecheck
   migration:
 
     runs-on: ubuntu-latest
