@@ -2,6 +2,7 @@ from unittest import result
 from django.test import TestCase
 from exchange_market_app import models
 from exchange_market_app.User import User, UserStates
+from exchange_market_app.utils.Items import Items, ItemsState
 
 
 # Create your tests here.
@@ -93,3 +94,46 @@ class UserClassTest(TestCase):
         expected = UserStates.USERNAME_EXISTS
 
         self.assertEqual( result, expected )
+
+
+class ItemClassTest(TestCase):
+
+    def setUp(self) -> None:
+        users = models.Users.objects.create(
+            name="TestUser2",
+            email="testuser2@test",
+            country="Denmark",
+            username= "TestUser2",
+            password="test")
+
+        inventory = models.Inventories.objects.create(
+            user=users
+        )
+        item1 = models.Items.objects.create(
+            inventory = inventory,
+            name = "TestItem1",
+            description = "This is test for Item",
+            image = ""
+        )
+        item2 = models.Items.objects.create(
+            inventory = inventory,
+            name = "TestItem2",
+            description = "This is test for Item",
+            image = ""
+        )
+
+    def test_Items_get_all_items(self):
+        result = Items.get_all_items()
+        expected = list(models.Items.objects.all())
+
+        self.assertListEqual(result, expected)
+
+    def test_Items_create_item(self):
+        user = models.Users.objects.filter(name="TestUser2")
+        name = "testItemName"
+        description = "testDescription"
+
+        result = Items.create_item(user[0].id, name, description)
+        expected = ItemsState.ITEM_CREATED
+
+        self.assertEqual(result, expected)

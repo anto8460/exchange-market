@@ -2,7 +2,7 @@
 from django.forms import forms
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from exchange_market_app.utils.Items import Items
+from exchange_market_app.utils.Items import Items, ItemsState
 from exchange_market_app import forms
 from exchange_market_app import User
 
@@ -95,3 +95,20 @@ def register(request):
                 return redirect("/login/")
 
     return render(request, 'register.html')
+
+def create_item(request):
+
+    if request.method == "POST":
+        create_item_form = forms.CreateItemForm(request.POST)
+        print(create_item_form.is_valid())
+        if create_item_form.is_valid():
+            user_id = request.session["user_id"]
+            name =  create_item_form.data["name"]
+            description = create_item_form.data["description"]
+            result = Items.create_item(user_id, name, description)
+            if (result == ItemsState.ITEM_CREATED):
+                messages.add_message(request, messages.SUCCESS, f"Item Succesfully added")
+                return redirect("/inventory")
+
+
+    return render(request, "create_item.html")

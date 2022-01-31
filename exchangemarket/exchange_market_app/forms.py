@@ -12,3 +12,8 @@ class RegisterForm(forms.Form):
     email = forms.CharField(label='Email', max_length=320)
     password = forms.CharField(label='Password', max_length=20)
     repeat_password = forms.CharField(label='Password', max_length=20)
+
+class CreateItemForm(forms.Form):
+    name = forms.CharField(label="Name", max_length=20)
+    description = forms.CharField(label="Name", max_length=20)
+    image = forms.FileInput()
