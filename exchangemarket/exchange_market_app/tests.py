@@ -150,7 +150,7 @@ class ItemClassTest(TestCase):
         name = "testItemName"
         description = "testDescription"
 
-        result = Items.create_item(user[0].id, name, description)
+        result = Items.create_item(user[0].id, name, description, False)
         expected = ItemsState.ITEM_CREATED
 
         self.assertEqual(result, expected)

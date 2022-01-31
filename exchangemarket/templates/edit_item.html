@@ -45,6 +45,21 @@
                         <label for="formFile" class="form-label">Import Picture</label>
                         <input  name="image" class="form-control" type="file" id="formFile" required>
                     </div>
+
+                    <div class="md-3">
+                        {% if free %}
+                            <input class="form-check-input" type="checkbox" value="1" name="check" id="flexCheckDefault" checked>
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    List Item for Free
+                            </label>
+                        {% else %}
+                            <input class="form-check-input" type="checkbox" value="1" name="check" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    List Item for Free
+                                </label>
+                        {% endif %}
+                    </div>
+                    <br>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>

@@ -55,9 +55,10 @@ class Items:
             return ItemsState.ITEM_NOT_FOUND
 
     @staticmethod
-    def edit_item(item_id, name, description):
+    def edit_item(item_id, name, description, free):
         item =  models.Items.objects.get(id=item_id)
         item.name = name
         item.description = description
+        item.is_free = free
         item.save()
         return ItemsState.ITEM_EDITED

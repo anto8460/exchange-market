@@ -139,9 +139,10 @@ def view_item(request, id):
 def edit_item(request, id):
     form = dict()
     item, status = Items.get_item(id)
-    print(item)
+    
     form["name"] = item[0].name
     form["description"] = item[0].description
+    form["free"] = item[0].is_free
 
     if request.method == "POST":
         edit_item_form = forms.CreateItemForm(request.POST)
@@ -150,13 +151,17 @@ def edit_item(request, id):
             user_id = request.session["user_id"]
             name =  edit_item_form.data["name"]
             description = edit_item_form.data["description"]
-            result = Items.edit_item(id, name, description)
+
+            free = True if "check" in edit_item_form.data else False
+
+            print(edit_item_form)
+            result = Items.edit_item(id, name, description, free)
             
             if (result == ItemsState.ITEM_EDITED):
                 messages.add_message(request, messages.SUCCESS, f"Item Succesfully edited!")
                 return redirect("/inventory")
 
-    return render(request, "edit_item.html", {"name": form["name"], "description": form["description"]})
+    return render(request, "edit_item.html", {"name": form["name"], "description": form["description"], "free": form["free"]})
 
 def create_offer(request):
 
